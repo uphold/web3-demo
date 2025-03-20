@@ -1,25 +1,46 @@
-import { ConnectionProvider, WalletProvider } from "@solana/wallet-adapter-react";
-import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
-import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import { Wallet } from "./components/Wallet";
-import { clusterApiUrl } from "@solana/web3.js";
-import { useMemo } from "react";
+import { ADDRESS, AMOUNT } from './config/constants';
+import { useConnect } from './hooks/useConnect';
+import { useTransaction } from './hooks/useTransaction';
+import { Container } from './components/Container/Container';
+import { Button } from './components/Button/Button';
 
 const App = () => {
-  const network = WalletAdapterNetwork.Mainnet;
+  const { connect, disconnect, isConnected, provider, walletAddress } = useConnect();
 
-  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-  const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
+  const {
+    commitTransaction,
+    createTransaction,
+    hasTransaction,
+    isCommitingTransaction,
+    isCreatingTransaction
+  } = useTransaction(provider);
 
   return (
-    <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets}>
-        <WalletModalProvider>
-          <Wallet />
-        </WalletModalProvider>
-      </WalletProvider>
-    </ConnectionProvider>
+    <div className="wrapper">
+      <Container>
+        {!isConnected && <Button onClick={connect}>CONNECT</Button>}
+
+        {isConnected && <Button onClick={disconnect}>DISCONNECT</Button>}
+
+        {isConnected && !hasTransaction && (
+          <Button
+            disabled={isCreatingTransaction}
+            onClick={() => createTransaction({ amount: AMOUNT, destination: ADDRESS, origin: walletAddress })}
+          >
+            CREATE TRANSACTION
+          </Button>
+        )}
+
+        {isConnected && hasTransaction && (
+          <Button
+            disabled={isCommitingTransaction}
+            onClick={commitTransaction}
+          >
+            COMMIT TRANSACTION
+          </Button>
+        )}
+      </Container>
+    </div>
   );
 }
 

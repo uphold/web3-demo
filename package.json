@@ -3,17 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@solana/wallet-adapter-base": "0.9.23",
-    "@solana/wallet-adapter-react": "0.15.35",
-    "@solana/wallet-adapter-react-ui": "0.9.35",
-    "@solana/wallet-adapter-wallets": "0.19.32",
     "@solana/web3.js": "1.91.4",
-    "@web3auth/sign-in-with-solana": "3.0.0",
-    "bs58": "5.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-scripts": "5.0.1",
-    "sweetalert2": "11.10.7"
+    "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "react-app-rewired start",
@@ -38,6 +31,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "assert": "2.1.0",
     "browserify-zlib": "0.2.0",
     "buffer": "6.0.3",
